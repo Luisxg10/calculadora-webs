@@ -19,4 +19,4 @@ Una calculadora sencilla desarrollada con HTML, CSS y JavaScript puro.
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/TU-USUARIO/calculadora-web.git
+   git clone https://github.com/TU-USUARIO/calculadora-web.git.
