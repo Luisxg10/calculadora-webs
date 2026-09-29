@@ -56,7 +56,6 @@ function deleteLast() {
 }
 
 function calculate() {
-    // falta el cierre de llave al final
     try {
         // Validar que la expresión sea segura
         if (!/^[0-9+\-*/. ]+$/.test(currentInput)) {
@@ -77,7 +76,7 @@ function calculate() {
         shouldResetDisplay = true;
         updateDisplay();
     }
-
+}
 
 // Soporte para teclado
 document.addEventListener('keydown', (e) => {
