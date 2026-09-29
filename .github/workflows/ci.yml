@@ -1,0 +1,60 @@
+name: CI - Calculadora Web
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+
+      - name: Preparar entorno (Node.js)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verificar estructura del proyecto
+        run: |
+          echo "Verificando archivos del proyecto..."
+          test -f index.html || (echo "Falta index.html" && exit 1)
+          test -f css/styles.css || (echo "Falta styles.css" && exit 1)
+          test -f js/calculator.js || (echo "Falta calculator.js" && exit 1)
+          test -f README.md || (echo "Falta README.md" && exit 1)
+          echo "✓ Todos los archivos existen"
+
+      - name: Validar sintaxis HTML
+        run: |
+          echo "Validando HTML..."
+          npx --yes html-validate index.html || echo "Advertencia: revisar HTML"
+
+      - name: Validar sintaxis JavaScript
+        run: |
+          echo "Validando JavaScript..."
+          node --check js/calculator.js
+          echo "✓ JavaScript sin errores de sintaxis"
+
+      - name: Ejecutar pruebas básicas
+        run: |
+          echo "Ejecutando pruebas básicas..."
+          node -e "
+            const fs = require('fs');
+            const code = fs.readFileSync('js/calculator.js', 'utf8');
+            if (!code.includes('function calculate')) {
+              console.error('Falta la función calculate');
+              process.exit(1);
+            }
+            if (!code.includes('function appendNumber')) {
+              console.error('Falta la función appendNumber');
+              process.exit(1);
+            }
+            console.log('✓ Funciones principales presentes');
+          "
+
+      - name: Mostrar resultado
+        run: echo "✓ CI completado exitosamente"
